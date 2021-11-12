@@ -1,10 +1,13 @@
 import gi
+from tkinter import *
+from tkinker import ttk
 #import sqluse
 #con = sl.connect('my-test.db')
 #test change
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Pango
 
+root = Tk()
 
 class SearchDialog(Gtk.Dialog):
     def __init__(self, parent):
@@ -27,17 +30,16 @@ class SearchDialog(Gtk.Dialog):
         self.show_all()
 
 
+groups = [("Dom", 0), ("Szkola", 1)]
+
 class MyWindow(Gtk.Window):
     def __init__(self):
         super().__init__(title="Simple Notebook Example")
         self.set_border_width(3)
-
-
         self.panels = Gtk.Paned(orientation=Gtk.Orientation.HORIZONTAL)
         self.notebook = Gtk.Notebook()
         self.add(self.panels)
-        
-
+    
         self.page1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self.page1.set_border_width(10)
 
@@ -55,27 +57,26 @@ class MyWindow(Gtk.Window):
         self.notebook.append_page(
             self.page2, Gtk.Image.new_from_icon_name("help-about", Gtk.IconSize.MENU)
         )
-       
-        self.labe = Gtk.Label(label="some note")
-        self.labe2 = Gtk.Label(label="some note2")
-        self.list = Gtk.ListBox()
-        self.list.insert(self.labe, 2)
-        self.list.insert(self.labe2, 3)
+        
+        glist = Gtk.ListStore(str, int)
+        for item in groups:
+            glist.append(list(item))
+        
+        gtree_view = Gtk.TreeView(glist)
+        for i, col_title in enumerate(["Nazwa", "id"]):
+            renderer = Gtk.CellRendererText()
+            column = Gtk.TreeViewColumn(col_title, renderer, text=i)
+            gtree_view.append_column(column)
 
-   
 
-        self.lab = Gtk.Label(label="aaaaa")
-        self.panels.add1(self.list)
+
+        self.panels.add1(gtree_view)
         self.panels.add2(self.notebook) 
-
-    def on_create_clicked(self, button):
-        self.page1.add(Gtk.Image.new_from_file ("a.png"))
 
 
     def create_toolbar(self):
         toolbar = Gtk.Toolbar()
         self.grid.attach(toolbar, 0, 0, 3, 1)
-
         button_bold = Gtk.ToolButton()
         button_bold.set_icon_name("format-text-bold-symbolic")
         toolbar.insert(button_bold, 0)
