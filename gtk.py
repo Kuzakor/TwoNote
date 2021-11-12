@@ -32,8 +32,10 @@ class MyWindow(Gtk.Window):
         super().__init__(title="Simple Notebook Example")
         self.set_border_width(3)
 
+
+        self.panels = Gtk.Paned(orientation=Gtk.Orientation.HORIZONTAL)
         self.notebook = Gtk.Notebook()
-        self.add(self.notebook)
+        self.add(self.panels)
         
 
         self.page1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
@@ -44,19 +46,27 @@ class MyWindow(Gtk.Window):
         self.create_toolbar()
         self.create_buttons()
 
-        
-         
+        self.note_name = "note"
         self.page1.add(self.grid)
-
-
-        self.notebook.append_page(self.page1, Gtk.Label(label="Plain Title"))
-
+        self.notebook.append_page(self.page1, Gtk.Label(label=self.note_name))
         self.page2 = Gtk.Box()
         self.page2.set_border_width(10)
         self.page2.add(Gtk.Label(label="A page with an image for a Title."))
         self.notebook.append_page(
             self.page2, Gtk.Image.new_from_icon_name("help-about", Gtk.IconSize.MENU)
         )
+       
+        self.labe = Gtk.Label(label="some note")
+        self.labe2 = Gtk.Label(label="some note2")
+        self.list = Gtk.ListBox()
+        self.list.insert(self.labe, 2)
+        self.list.insert(self.labe2, 3)
+
+   
+
+        self.lab = Gtk.Label(label="aaaaa")
+        self.panels.add1(self.list)
+        self.panels.add2(self.notebook) 
 
     def on_create_clicked(self, button):
         self.page1.add(Gtk.Image.new_from_file ("a.png"))
