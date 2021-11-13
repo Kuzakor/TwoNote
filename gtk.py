@@ -1,9 +1,11 @@
 import gi
-#import sqluse
-#con = sl.connect('my-test.db')
+import sqluse
+import sqlite3 as sl
+con = sl.connect('my-test.db')
 #test change
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Pango
+
 
 
 class SearchDialog(Gtk.Dialog):
@@ -26,8 +28,6 @@ class SearchDialog(Gtk.Dialog):
 
         self.show_all()
 
-
-groups = [("Dom", 0), ("Szkola", 1)]
 
 class MyWindow(Gtk.Window):
     def __init__(self):
@@ -55,24 +55,28 @@ class MyWindow(Gtk.Window):
             self.page2, Gtk.Image.new_from_icon_name("help-about", Gtk.IconSize.MENU)
         )
         
-        glist = Gtk.TreeStore(str, str)
-        treeItem = glist.append(None, ["ala", ""])
-        glist.append(treeItem, ["ma kota", ""])
-        glist.append(treeItem, ["jak", ""])
-        treeItem = glist.append(None, ["cos", ""])                                              
-        glist.append(treeItem, ["testy", ""]) 
-        
+
+        self.panels.add1(self.load_groups())
+        self.panels.add2(self.notebook) 
+
+    
+    def load_groups(self):
+        glist = Gtk.TreeStore(str)
+        gr = sqluse.sql_read_all_groups(con)
+        for a in range(len(gr)):
+            treeItem = glist.append(None, [gr[a][1]])
+            b = sqluse.sql_read_all_notes(con, str(a + 1))
+            for i in range(len(b)):
+                glist.append(treeItem, [b[i][1]])
+
         gtree_view = Gtk.TreeView(glist)
-        for i, col_title in enumerate(["Nazwa", "id"]):
+        for i , col_title in enumerate(["Nazwa"]):
             renderer = Gtk.CellRendererText()
             column = Gtk.TreeViewColumn(col_title, renderer, text=i)
             gtree_view.append_column(column)
 
-
-
-        self.panels.add1(gtree_view)
-        self.panels.add2(self.notebook) 
-
+        return gtree_view
+  
 
     def create_toolbar(self):
         toolbar = Gtk.Toolbar()

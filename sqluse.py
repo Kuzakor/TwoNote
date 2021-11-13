@@ -24,6 +24,15 @@ def sql_read_all_notes(base, id_group):
         data = con.execute("SELECT notes.id, notes.name, groups.name FROM notes, groups where notes.id_group = groups.id and id_group = " + id_group)
         for row in data:
             table.append(row)
+    #print(table)
+    return table
+
+def sql_read_all_groups(base):
+    table = []
+    with con:
+        data = con.execute("SELECT * FROM groups")
+        for row in data:
+            table.append(row)
     return table
 
 
