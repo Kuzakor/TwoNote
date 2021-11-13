@@ -55,12 +55,11 @@ class MyWindow(Gtk.Window):
             self.page2, Gtk.Image.new_from_icon_name("help-about", Gtk.IconSize.MENU)
         )
         
-        glist = Gtk.TreeStore(str, str)
-        treeItem = glist.append(None, ["ala", ""])
-        glist.append(treeItem, ["ma kota", ""])
-        glist.append(treeItem, ["jak", ""])
-        treeItem = glist.append(None, ["cos", ""])                                              
-        glist.append(treeItem, ["testy", ""]) 
+        glist = Gtk.TreeStore(str, int)
+        for item in groups:
+            treeItem = glist.append(None, list(item))
+            glist.append(treeItem, list(item))
+
         
         gtree_view = Gtk.TreeView(glist)
         for i, col_title in enumerate(["Nazwa", "id"]):
